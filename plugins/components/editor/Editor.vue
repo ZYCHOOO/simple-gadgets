@@ -14,9 +14,9 @@
 <script>
 import Wangeditor from 'wangeditor'
 import EditorMixin from './EditorMixin'
-import { getPageBaseUrl } from '@/utils/index'
-import { getToken } from '@/utils/auth'
-import { htmlTagFilter } from './util'
+// import { getPageBaseUrl } from '@/utils/index'
+// import { getToken } from '@/utils/auth'
+// import { htmlTagFilter } from './util'
 export default {
   name: 'Editor',
   mixins: [EditorMixin],
@@ -112,12 +112,12 @@ export default {
     },
     setEditor () {
       this.editor.customConfig.uploadImgShowBase64 = true // base 64 存储图片
-      const uploadBaseUrl = getPageBaseUrl().replace(/ump-web\//g, '')
-      this.editor.customConfig.uploadImgServer = uploadBaseUrl + 'ump/frontend/file/upload' // 配置服务器端地址
+      // const uploadBaseUrl = getPageBaseUrl().replace(/ump-web\//g, '')
+      // this.editor.customConfig.uploadImgServer = uploadBaseUrl + 'ump/frontend/file/upload' // 配置服务器端地址
 
-      this.editor.customConfig.uploadImgHeaders = {
-        Authorization: 'Bearer ' + getToken()
-      }
+      // this.editor.customConfig.uploadImgHeaders = {
+      //   Authorization: 'Bearer ' + getToken()
+      // }
       this.editor.customConfig.uploadFileName = 'file' // 后端接受上传文件的参数名
 
       this.editor.customConfig.showLinkImg = false
@@ -148,21 +148,26 @@ export default {
       ]
 
       this.editor.customConfig.uploadImgHooks = {
+        // eslint-disable-next-line no-unused-vars
         fail: (xhr, editor, result) => {
           // alert('上传失败:' + result)
           // 插入图片失败回调
         },
+        // eslint-disable-next-line no-unused-vars
         success: function (xhr, editor, result) {
           console.log('上传成功')
         },
+        // eslint-disable-next-line no-unused-vars
         timeout: (xhr, editor) => {
           // 网络超时的回调
         },
+        // eslint-disable-next-line no-unused-vars
         error: (xhr, editor) => {
           alert('网络异常，请重新上传')
           return false
           // 图片上传错误的回调
         },
+        // eslint-disable-next-line no-unused-vars
         customInsert: (insertImg, result, editor) => {
           // 图片上传成功，插入图片的回调
           if (result.code === 0) {
@@ -178,13 +183,14 @@ export default {
       this.editor.customConfig.onchange = (html) => {
         // 监控变化，同步更新到 textarea
         // 模板内容不能修改 perf-20210419
-        const templateReg = new RegExp(htmlTagFilter(this.template))
-        if (this.templateFlag === 1 && templateReg && !templateReg.test(html)) {
-          this.$message.warning('模板内容不能修改！')
-          this.setContent(`${this.template}${this.sign}`)
-        } else {
-          this.content = html
-        }
+        // const templateReg = new RegExp(htmlTagFilter(this.template))
+        // if (this.templateFlag === 1 && templateReg && !templateReg.test(html)) {
+        //   this.$message.warning('模板内容不能修改！')
+        //   this.setContent(`${this.template}${this.sign}`)
+        // } else {
+        //   this.content = html
+        // }
+        this.content = html
       }
 
       // 自定义处理粘贴的文本内容

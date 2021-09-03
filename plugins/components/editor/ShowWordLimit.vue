@@ -33,11 +33,11 @@ export default {
     border-radius: 4px;
     &.primary-text {
       font: normal 400 12px PingFangSC-Regular, PingFang SC;
-      color: $mainText;
+      color: #3B414F;
     }
     &.warning-text {
       font: normal 400 12px PingFangSC-Regular, PingFang SC;
-      color: $--color-danger;
+      color: #FB3A39;
     }
   }
 </style>

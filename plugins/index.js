@@ -1,13 +1,15 @@
 // 组件
 import DateTime from './components/date-time/DateTime'
 import ScrollToTop from './components/scroll-to-top/ScrollToTop'
+import Editor from './components/editor/Editor'
+import OverflowTooltip from './components/overflow-tooltip/OverflowTooltip'
 
 // 指令
 
 // 过滤器
 
 // 组件列表
-const components = [DateTime, ScrollToTop]
+const components = [DateTime, ScrollToTop, Editor, OverflowTooltip]
 
 // 指令列表
 
