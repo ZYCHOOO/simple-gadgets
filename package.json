@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "wangeditor": "^4.7.5"
   },
   "keywords": [
     "返回顶部",
-    "日期显示"
+    "日期显示",
+    "富文本编辑器"
   ],
   "main": "dist/zychooo-gadgets.umd.min.js",
   "devDependencies": {
