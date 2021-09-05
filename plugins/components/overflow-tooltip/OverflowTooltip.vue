@@ -1,12 +1,16 @@
 <template>
-  <el-tooltip :content="content" :disabled="isShowTooltip" class="overflow-tooltip">
+  <el-tooltip :content="content" :disabled="isHideTooltip">
     <div
-      :ref="content"
-      class="overflow-tooltip__item overflow-ellipsis"
-      :style="itemStyle"
-      @mouseover="onMouseOver(content)"
-    >
-      {{ content }}
+      ref="parent"
+      class="overflow-tooltip__item"
+      :class="overflowMultiple ? 'multiple-line__ellipsis' : 'single-line__ellipsis'"
+      :style="tooltipStyle">
+      <span
+        :ref="content"
+        @mouseover="onMouseOver(content)"
+      >
+        {{ content }}
+      </span>
     </div>
   </el-tooltip>
 </template>
@@ -16,11 +20,23 @@ export default {
   name: 'OverflowTooltip',
   props: {
     content: { type: String, default: '', required: true },
-    itemStyle: { type: Object, default: () => {}, required: true }
+    itemStyle: { type: Object, default: () => {}, required: true },
+    // 是否多行省略
+    overflowMultiple: { type: Boolean, default: false },
+    line: { type: Number, default: 0 }
   },
   data() {
     return {
-      isShowTooltip: true
+      isHideTooltip: true
+    }
+  },
+  computed: {
+    tooltipStyle() {
+      const style = { ...this.itemStyle }
+      if (this.overflowMultiple) {
+        style['-webkit-line-clamp'] = this.line
+      }
+      return style
     }
   },
   methods: {
@@ -28,18 +44,25 @@ export default {
       // 判断是否开启tooltip
       const item = this.$refs[content] instanceof Array
         ? this.$refs[content][0] : this.$refs[content]
-      const scrollWidth = item.scrollWidth
+      const parent = this.$refs.parent
       const contentWidth = item.offsetWidth
-      this.isShowTooltip = scrollWidth <= contentWidth
+      this.isHideTooltip = this.overflowMultiple
+        ? parent.scrollheight <= parent.offsetHeight : contentWidth <= parent.clientWidth
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .overflow-ellipsis {
-    overflow: hidden;
+  .single-line__ellipsis {
     white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .multiple-line__ellipsis {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
   }
 </style>
