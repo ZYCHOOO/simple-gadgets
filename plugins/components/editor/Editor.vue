@@ -146,21 +146,26 @@ export default {
       ]
 
       this.editor.customConfig.uploadImgHooks = {
+        // eslint-disable-next-line no-unused-vars
         fail: (xhr, editor, result) => {
           // alert('上传失败:' + result)
           // 插入图片失败回调
         },
+        // eslint-disable-next-line no-unused-vars
         success: function (xhr, editor, result) {
           console.log('上传成功')
         },
+        // eslint-disable-next-line no-unused-vars
         timeout: (xhr, editor) => {
           // 网络超时的回调
         },
+        // eslint-disable-next-line no-unused-vars
         error: (xhr, editor) => {
           alert('网络异常，请重新上传')
           return false
           // 图片上传错误的回调
         },
+        // eslint-disable-next-line no-unused-vars
         customInsert: (insertImg, result, editor) => {
           // 图片上传成功，插入图片的回调
           if (result.code === 0) {
