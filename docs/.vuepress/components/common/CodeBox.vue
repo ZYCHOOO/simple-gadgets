@@ -1,24 +1,24 @@
 <template>
   <div class="code">
-    <div class="code--title">
+    <div class="code-title">
       <h2>{{title}}</h2>
       <small v-if="description">{{description}}</small>
     </div>
-    <div class="code--demo">
-      <div class="code-content">
+    <div class="code-box">
+      <div class="code-box__content">
         <slot></slot>
       </div>
     </div>
-    <div v-if="isShow" class="code--segment">
+    <div v-if="isShow" class="code-segment">
       <slot name="codeText"></slot>
     </div>
-    <div v-if="$slots.codeText" class="code--button" @click="handleToggleShow">{{codeTextBtn}}</div>
+    <div v-if="$slots.codeText" class="code-button" @click="handleToggleShow">{{codeTextBtn}}</div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'DemoPage',
+  name: 'CodeBox',
   props: ['title', 'description'],
   data() {
     return {
@@ -37,7 +37,7 @@ export default {
 
 <style lang="less" scoped>
 .code {
-  .code--title {
+  .code-title {
     h2 {
       padding: 0;
       margin: 0;
@@ -52,13 +52,14 @@ export default {
       color: #5e6d82;
     }
   }
-  .code--demo {
+  .code-box {
+    margin-top: 10px;
     border: 1px solid #ebebeb;
     border-bottom: none;
     border-radius: 3px;
     box-shadow: 0 0 2px 0 rgba(232, 237, 250, 0.6),
       0 1px 2px 0 rgba(232, 237, 250, 0.5);
-    .code-content {
+    &__content {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -67,7 +68,7 @@ export default {
       border-bottom: 1px solid #ddd;
     }
   }
-  .code--button {
+  .code-button {
     background: #fafbfc;
     color: #409eff;
     font-weight: 400;
@@ -82,11 +83,11 @@ export default {
   }
 
   & + .code {
-    margin-top: 40px;
+    margin-top: 20px;
   }
 
   &:not(:first-child) {
-    margin-top: 40px;
+    margin-top: 20px;
   }
 }
 </style>

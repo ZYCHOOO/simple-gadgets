@@ -1,5 +1,5 @@
 <script>
-import * as utils from './util'
+import * as utils from './utils'
 export default {
   name: 'EditorMixin',
   data() {

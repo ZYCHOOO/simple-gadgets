@@ -24,9 +24,9 @@
 
 <script>
 export default {
-  name: 'Component1',
+  name: 'OverflowTooltip1-1',
   components: {
-    OverflowTooltip: () => import('../src/overflowTooltip')
+    OverflowTooltip: () => import('../../../../plugins/components/overflow-tooltip/OverflowTooltip')
   },
   data() {
     return {
@@ -53,7 +53,7 @@ export default {
         border: '1px solid #F2F2F2',
         borderRadius: '4px',
         color: '#3B414F'
-      }
+            }
     }
   }
 }

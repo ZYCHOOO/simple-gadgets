@@ -1,19 +1,20 @@
+import Cookies from 'js-cookie'
 
-function _isArray(val) {
+function _isArray (val) {
   if (!val) {
     return false
   }
   return Object.prototype.toString.call(val) === '[object Array]'
 }
 
-function _isFunction(val) {
+function _isFunction (val) {
   if (!val) {
     return false
   }
   return Object.prototype.toString.call(val) === '[object Function]'
 }
 
-function _inArray(val, arr) {
+function _inArray (val, arr) {
   for (var i = 0, len = arr.length; i < len; i++) {
     if (val === arr[i]) {
       return i
@@ -22,7 +23,7 @@ function _inArray(val, arr) {
   return -1
 }
 
-function _each(obj, fn) {
+function _each (obj, fn) {
   if (_isArray(obj)) {
     for (var i = 0, len = obj.length; i < len; i++) {
       if (fn.call(obj[i], i, obj[i]) === false) {
@@ -41,59 +42,59 @@ function _each(obj, fn) {
   }
 }
 
-function _trim(str) {
+function _trim (str) {
   // Forgive various special whitespaces, e.g. &nbsp;(\xa0).
   return str.replace(/(?:^[ \t\n\r]+)|(?:[ \t\n\r]+$)/g, '')
 }
 
-function _inString(val, str, delimiter) {
+function _inString (val, str, delimiter) {
   delimiter = delimiter === undefined ? ',' : delimiter
   return (delimiter + str + delimiter).indexOf(delimiter + val + delimiter) >= 0
 }
 
-function _addUnit(val, unit) {
+function _addUnit (val, unit) {
   unit = unit || 'px'
   return val && /^-?\d+(?:\.\d+)?$/.test(val) ? val + unit : val
 }
 
-function _removeUnit(val) {
+function _removeUnit (val) {
   var match
   return val && (match = /(\d+)/.exec(val)) ? parseInt(match[1], 10) : 0
 }
 
-function _escape(val) {
+function _escape (val) {
   return val.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
-function _unescape(val) {
+function _unescape (val) {
   return val.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&')
 }
 
-function _toCamel(str) {
+function _toCamel (str) {
   var arr = str.split('-')
   str = ''
-  _each(arr, function(key, val) {
+  _each(arr, function (key, val) {
     str += (key > 0) ? val.charAt(0).toUpperCase() + val.substr(1) : val
   })
   return str
 }
 
-function _toHex(val) {
-  function hex(d) {
+function _toHex (val) {
+  function hex (d) {
     var s = parseInt(d, 10).toString(16).toUpperCase()
     return s.length > 1 ? s : '0' + s
   }
   return val.replace(/rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/ig,
-    function($0, $1, $2, $3) {
+    function ($0, $1, $2, $3) {
       return '#' + hex($1) + hex($2) + hex($3)
     }
   )
 }
 
-function _toMap(val, delimiter) {
+function _toMap (val, delimiter) {
   delimiter = delimiter === undefined ? ',' : delimiter
   var map = {}; var arr = _isArray(val) ? val : val.split(delimiter); var match
-  _each(arr, function(key, val) {
+  _each(arr, function (key, val) {
     if ((match = /^(\d+)\.\.(\d+)$/.exec(val))) {
       for (var i = parseInt(match[1], 10); i <= parseInt(match[2], 10); i++) {
         map[i.toString()] = true
@@ -105,23 +106,23 @@ function _toMap(val, delimiter) {
   return map
 }
 
-function _toArray(obj, offset) {
+function _toArray (obj, offset) {
   return Array.prototype.slice.call(obj, offset || 0)
 }
 
-function _undef(val, defaultVal) {
+function _undef (val, defaultVal) {
   return val === undefined ? defaultVal : val
 }
 
-function _invalidUrl(url) {
+function _invalidUrl (url) {
   return !url || /[<>"]/.test(url)
 }
 
-function _addParam(url, param) {
+function _addParam (url, param) {
   return url.indexOf('?') >= 0 ? url + '&' + param : url + '?' + param
 }
 
-function _getCssList(css) {
+function _getCssList (css) {
   css = css.replace(/&quot;/g, '"')
 
   var list = {}
@@ -136,7 +137,7 @@ function _getCssList(css) {
   return list
 }
 
-function _getAttrList(tag) {
+function _getAttrList (tag) {
   var list = {}
   var reg = /\s+(?:([\w\-:]+)|(?:([\w\-:]+)=([^\s"'<>]+))|(?:([\w\-:"]+)="([^"]*)")|(?:([\w\-:"]+)='([^']*)'))(?=(?:\s|\/|>)+)/g
   var match
@@ -148,12 +149,33 @@ function _getAttrList(tag) {
   return list
 }
 
-function _htmlTagFilter(status) {
+// 过滤内容中的html标签
+function _filterHtmlTag (content) {
   const reg = /<\/?.+?\/?>/g
-  return status
+  return content
     .replace(reg, '')
     .replace(/[ ]/g, '')
     .replace(/&nbsp;/ig, '') // 去掉&nbsp;
+}
+
+// 获取当前协议+域名
+function _getBaseUrl (systemBase) {
+  let baseURL = ''
+  if (!window.location.origin) { // 兼容IE，IE11版本下location.origin为undefined
+    window.location.origin = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '')
+  } else {
+    baseURL = window.location.origin
+  }
+  baseURL = `${baseURL}${systemBase}`
+  return baseURL
+}
+
+/**
+ * 获取token
+ * @param namespace
+ */
+function _getToken (systemBase) {
+  return Cookies.get('accessToken', { path: `${systemBase}` })
 }
 
 const _INLINE_TAG_MAP = _toMap('a,abbr,acronym,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,img,input,ins,kbd,label,map,q,s,samp,select,small,span,strike,strong,sub,sup,textarea,tt,u,var')
@@ -222,7 +244,9 @@ export {
   _addParam,
   _getCssList,
   _getAttrList,
-  _htmlTagFilter,
+  _filterHtmlTag,
+  _getBaseUrl,
+  _getToken,
   _INLINE_TAG_MAP,
   _BLOCK_TAG_MAP,
   _SINGLE_TAG_MAP,

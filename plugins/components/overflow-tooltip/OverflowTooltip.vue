@@ -1,5 +1,5 @@
 <template>
-  <el-tooltip :content="content" :disabled="isHideTooltip">
+  <el-tooltip :content="content" :disabled="isHideTooltip" :effect="effect">
     <div
       ref="parent"
       class="overflow-tooltip__item"
@@ -23,15 +23,16 @@ export default {
     itemStyle: { type: Object, default: () => {}, required: true },
     // 是否多行省略
     overflowMultiple: { type: Boolean, default: false },
-    line: { type: Number, default: 0 }
+    line: { type: Number, default: 0 },
+    effect: { type: String, default: 'dark' }
   },
-  data() {
+  data () {
     return {
       isHideTooltip: true
     }
   },
   computed: {
-    tooltipStyle() {
+    tooltipStyle () {
       const style = { ...this.itemStyle }
       if (this.overflowMultiple) {
         style['-webkit-line-clamp'] = this.line
@@ -40,7 +41,7 @@ export default {
     }
   },
   methods: {
-    onMouseOver(content) {
+    onMouseOver (content) {
       // 判断是否开启tooltip
       const item = this.$refs[content] instanceof Array
         ? this.$refs[content][0] : this.$refs[content]

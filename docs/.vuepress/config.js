@@ -16,8 +16,16 @@ module.exports = {
       '/base/': [
         '/base/',
         {
+          title: '开发指南',
+          collapsable: false, // 是否设置为可展开，false-不可点击
+          children: [
+            'guide/install',
+            'guide/quickStart'
+          ]
+        },
+        {
           title: '常用组件',
-          collapsable: true,
+          collapsable: false, // 是否设置为可展开，false-不可点击
           children: [
             // 'components/icon',
             'components/overflowTooltip',

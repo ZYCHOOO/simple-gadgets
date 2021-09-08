@@ -1,23 +1,23 @@
 <template>
   <div
     class="show-word-limit flex-row flex-center"
-    :class="count > limit ? 'warning-text animate__animated animate__shakeX' : 'primary-text'">
+    :class="count > max ? 'warning-text animate__animated animate__shakeX' : 'primary-text'">
     <span>{{ count }}</span>
-    <span>/{{ limit }}</span>
+    <span>/{{ max }}</span>
   </div>
 </template>
 
 <script>
-import { htmlTagFilter } from './util'
+import { _filterHtmlTag } from './utils'
 export default {
   name: 'ShowWordLimit',
   props: {
-    limit: { type: Number, default: 0, required: true },
+    max: { type: Number, default: 0, required: true },
     content: { type: String, default: '', required: true }
   },
   computed: {
-    count() {
-      return htmlTagFilter(this.content).length
+    count () {
+      return _filterHtmlTag(this.content).length
     }
   }
 }

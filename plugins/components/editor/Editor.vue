@@ -1,12 +1,13 @@
 <template lang="html">
-  <div class="ump-editor">
+  <div class="bmsk-editor">
     <div class="editor-bar">
       <div ref="toolbar" class="toolbar" />
       <div ref="editor" class="text" :style="{height: contentHeight}" />
     </div>
     <show-word-limit
+      v-if="showWordLimit"
       :content="value"
-      :limit="limit"
+      :max="max"
     />
   </div>
 </template>
@@ -14,9 +15,7 @@
 <script>
 import Wangeditor from 'wangeditor'
 import EditorMixin from './EditorMixin'
-// import { getPageBaseUrl } from '@/utils/index'
-// import { getToken } from '@/utils/auth'
-// import { htmlTagFilter } from './util'
+import * as utils from './utils'
 export default {
   name: 'Editor',
   mixins: [EditorMixin],
@@ -25,7 +24,6 @@ export default {
   },
   data () {
     return {
-      limit: 3000,
       content: '',
       editor: null,
       info_: null,
@@ -54,29 +52,27 @@ export default {
       type: String,
       default: '320px'
     },
-    // 模板内容
-    template: {
-      type: String,
-      default: ''
-    },
-    // 模板类型
-    templateFlag: {
-      // 1-自变量模板 2-非自变量模板
-      type: [Number, String],
-      default: 1
-    },
-    sign: {
-      type: String,
-      default: ''
-    },
     placeholder: {
+      type: String,
+      default: ''
+    },
+    max: {
+      type: Number,
+      default: 0
+    },
+    showWordLimit: {
+      type: Boolean,
+      default: false
+    },
+    // 基路径
+    systemBase: {
       type: String,
       default: ''
     }
   },
   watch: {
     value: {
-      handler(val) {
+      handler (val) {
         if (val) {
           if (val !== this.content) {
             this.setContent(val)
@@ -86,7 +82,7 @@ export default {
         }
       }
     },
-    content(val) {
+    content (val) {
       this.$emit('input', val)
     }
   },
@@ -112,12 +108,14 @@ export default {
     },
     setEditor () {
       this.editor.customConfig.uploadImgShowBase64 = true // base 64 存储图片
-      // const uploadBaseUrl = getPageBaseUrl().replace(/ump-web\//g, '')
-      // this.editor.customConfig.uploadImgServer = uploadBaseUrl + 'ump/frontend/file/upload' // 配置服务器端地址
+      const pattern = this.systemBase.replace(/\//, '')
+      const uploadBaseUrl = utils._getBaseUrl(this.systemBase).replace(pattern, '')
+      this.editor.customConfig.uploadImgServer = `${uploadBaseUrl}${process.env.VUE_APP_BASE_API}/file/upload` // 配置服务器端地址
+      // this.editor.customConfig.uploadImgServer = `${uploadBaseUrl}/file/upload` // 配置服务器端地址
 
-      // this.editor.customConfig.uploadImgHeaders = {
-      //   Authorization: 'Bearer ' + getToken()
-      // }
+      this.editor.customConfig.uploadImgHeaders = {
+        Authorization: `Bearer ${utils._getToken(this.systemBase)}`
+      }
       this.editor.customConfig.uploadFileName = 'file' // 后端接受上传文件的参数名
 
       this.editor.customConfig.showLinkImg = false
@@ -148,26 +146,21 @@ export default {
       ]
 
       this.editor.customConfig.uploadImgHooks = {
-        // eslint-disable-next-line no-unused-vars
         fail: (xhr, editor, result) => {
           // alert('上传失败:' + result)
           // 插入图片失败回调
         },
-        // eslint-disable-next-line no-unused-vars
         success: function (xhr, editor, result) {
           console.log('上传成功')
         },
-        // eslint-disable-next-line no-unused-vars
         timeout: (xhr, editor) => {
           // 网络超时的回调
         },
-        // eslint-disable-next-line no-unused-vars
         error: (xhr, editor) => {
           alert('网络异常，请重新上传')
           return false
           // 图片上传错误的回调
         },
-        // eslint-disable-next-line no-unused-vars
         customInsert: (insertImg, result, editor) => {
           // 图片上传成功，插入图片的回调
           if (result.code === 0) {
@@ -182,14 +175,6 @@ export default {
 
       this.editor.customConfig.onchange = (html) => {
         // 监控变化，同步更新到 textarea
-        // 模板内容不能修改 perf-20210419
-        // const templateReg = new RegExp(htmlTagFilter(this.template))
-        // if (this.templateFlag === 1 && templateReg && !templateReg.test(html)) {
-        //   this.$message.warning('模板内容不能修改！')
-        //   this.setContent(`${this.template}${this.sign}`)
-        // } else {
-        //   this.content = html
-        // }
         this.content = html
       }
 
@@ -239,7 +224,7 @@ export default {
       this.editor.create()
       this.editor.txt.html(this.value)
     },
-    setContent(val) {
+    setContent (val) {
       this.editor.txt.html(val)
     }
   }
@@ -247,6 +232,9 @@ export default {
 </script>
 
 <style lang="scss">
+.bmsk-editor {
+  position: relative;
+}
 .editor-bar {
   overflow-x: hidden;
   position: relative;
