@@ -28,6 +28,8 @@ module.exports = {
           collapsable: false, // 是否设置为可展开，false-不可点击
           children: [
             // 'components/icon',
+            'components/button',
+            'components/select',
             'components/overflowTooltip',
             'components/editor'
           ]
