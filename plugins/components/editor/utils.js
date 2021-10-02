@@ -1,5 +1,3 @@
-import Cookies from 'js-cookie'
-
 function _isArray (val) {
   if (!val) {
     return false
@@ -159,23 +157,14 @@ function _filterHtmlTag (content) {
 }
 
 // 获取当前协议+域名
-function _getBaseUrl (systemBase) {
+function _getBaseUrl () {
   let baseURL = ''
   if (!window.location.origin) { // 兼容IE，IE11版本下location.origin为undefined
     window.location.origin = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '')
   } else {
     baseURL = window.location.origin
   }
-  baseURL = `${baseURL}${systemBase}`
   return baseURL
-}
-
-/**
- * 获取token
- * @param namespace
- */
-function _getToken (systemBase) {
-  return Cookies.get('accessToken', { path: `${systemBase}` })
 }
 
 const _INLINE_TAG_MAP = _toMap('a,abbr,acronym,b,basefont,bdo,big,br,button,cite,code,del,dfn,em,font,i,img,input,ins,kbd,label,map,q,s,samp,select,small,span,strike,strong,sub,sup,textarea,tt,u,var')
@@ -246,7 +235,6 @@ export {
   _getAttrList,
   _filterHtmlTag,
   _getBaseUrl,
-  _getToken,
   _INLINE_TAG_MAP,
   _BLOCK_TAG_MAP,
   _SINGLE_TAG_MAP,

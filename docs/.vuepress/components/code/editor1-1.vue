@@ -13,7 +13,7 @@
 export default {
   name: 'Editor1-1',
   components: {
-    Editor: () => import('../src/overflowTooltip')
+    Editor: () => import('../../../../plugins/components/editor/Editor')
   },
   data() {
     return {

@@ -15,7 +15,7 @@
 export default {
   name: 'Editor1-2',
   components: {
-    Editor: () => import('../src/overflowTooltip')
+    Editor: () => import('../../../../plugins/components/editor/Editor')
   },
   data() {
     return {
