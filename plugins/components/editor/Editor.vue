@@ -64,10 +64,13 @@ export default {
       type: Boolean,
       default: false
     },
-    // 基路径
-    systemBase: {
+    action: {
       type: String,
       default: ''
+    },
+    headers: {
+      type: Object,
+      default: () => {}
     }
   },
   watch: {
@@ -108,14 +111,9 @@ export default {
     },
     setEditor () {
       this.editor.customConfig.uploadImgShowBase64 = true // base 64 存储图片
-      const pattern = this.systemBase.replace(/\//, '')
-      const uploadBaseUrl = utils._getBaseUrl(this.systemBase).replace(pattern, '')
-      this.editor.customConfig.uploadImgServer = `${uploadBaseUrl}${process.env.VUE_APP_BASE_API}/file/upload` // 配置服务器端地址
-      // this.editor.customConfig.uploadImgServer = `${uploadBaseUrl}/file/upload` // 配置服务器端地址
+      this.editor.customConfig.uploadImgServer = utils._getBaseUrl() + this.action // 后端上传照片接口
 
-      this.editor.customConfig.uploadImgHeaders = {
-        Authorization: `Bearer ${utils._getToken(this.systemBase)}`
-      }
+      this.editor.customConfig.uploadImgHeaders = this.headers // 后端上传照片请求头
       this.editor.customConfig.uploadFileName = 'file' // 后端接受上传文件的参数名
 
       this.editor.customConfig.showLinkImg = false
@@ -149,7 +147,6 @@ export default {
         // eslint-disable-next-line no-unused-vars
         fail: (xhr, editor, result) => {
           // alert('上传失败:' + result)
-          // 插入图片失败回调
         },
         // eslint-disable-next-line no-unused-vars
         success: function (xhr, editor, result) {
@@ -158,12 +155,12 @@ export default {
         // eslint-disable-next-line no-unused-vars
         timeout: (xhr, editor) => {
           // 网络超时的回调
+          alert('网络超时，请重新上传！')
         },
         // eslint-disable-next-line no-unused-vars
         error: (xhr, editor) => {
-          alert('网络异常，请重新上传')
+          alert('网络异常，请重新上传！')
           return false
-          // 图片上传错误的回调
         },
         // eslint-disable-next-line no-unused-vars
         customInsert: (insertImg, result, editor) => {

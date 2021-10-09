@@ -45,7 +45,8 @@
           { param: 'placeholder', desc: '输入框占位文本', type: 'String', optionValue: '', defaultValue: '' },
           { param: 'max', desc: '最大字数限制', type: 'Number', optionValue: '', defaultValue: '' },
           { param: 'showWordLimit', desc: '是否显示当前字数', type: 'Boolean', optionValue: '', defaultValue: 'false' },
-          { param: 'systemBase', desc: '基路径（用于图片上传）', type: 'String', optionValue: '', defaultValue: '' }
+          { param: 'action', desc: '上传的地址', type: 'String', optionValue: '', defaultValue: '' },
+          { param: 'headers', desc: '设置请求的请求头部', type: 'Object', optionValue: '', defalutValue: '' }
         ]
       }
     }
